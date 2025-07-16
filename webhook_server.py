@@ -4,26 +4,23 @@ import json
 
 app = Flask(__name__)
 
-# Load config
-with open('config.json') as f:
-    config = json.load(f)
-
-BOT_TOKEN = config['telegram_bot_token']
-CHAT_ID = config['telegram_chat_id']
-FILE_LINK = config['file_url']
-
-bot = telegram.Bot(token=BOT_TOKEN)
-
 @app.route('/')
 def home():
     return '💖 Kitty is alive 💖'
 
 @app.route('/send-file', methods=['POST'])
 def send_file():
+    with open('config.json') as f:
+        config = json.load(f)
+
+    bot = telegram.Bot(token=config['telegram_bot_token'])
+    chat_id = config['telegram_chat_id']
+    file_link = config['file_url']
+
     data = request.json
     if data.get('text') == 'Paid 💸':
-        msg = f"Thanks for the payment 😘\nHere’s your file: {FILE_LINK}"
-        bot.send_message(chat_id=CHAT_ID, text=msg)
+        msg = f"Thanks for the payment 😘\nHere’s your file: {file_link}"
+        bot.send_message(chat_id=chat_id, text=msg)
         return 'Message sent!', 200
     return 'Ignored', 400
 
