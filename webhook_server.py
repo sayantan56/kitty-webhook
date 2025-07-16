@@ -19,9 +19,10 @@ def send_file():
 
     data = request.json
     if data.get('text') == 'Paid 💸':
-        msg = f"Thanks for the payment 😘\nHere’s your file: {file_link}"
+        msg = f"Thanks for the payment \nHere’s your file: {file_link}"
         bot.send_message(chat_id=chat_id, text=msg)
         return 'Message sent!', 200
+
     return 'Ignored', 400
 
 if __name__ == '__main__':
