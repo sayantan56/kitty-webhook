@@ -4,26 +4,29 @@ import json
 
 app = Flask(__name__)
 
-@app.route('/')
+with open("config.json", "r") as f:
+    config = json.load(f)
+
+BOT_TOKEN = config["telegram_bot_token"]
+CHAT_ID = config["telegram_chat_id"]
+FILE_URL = config["file_url"]
+
+bot = telegram.Bot(token=BOT_TOKEN)
+
+@app.route("/", methods=["GET"])
 def home():
-    return '💖 Kitty is alive 💖'
+    return "💖 Kitty Webhook is alive 💖"
 
-@app.route('/send-file', methods=['POST'])
+@app.route("/send-file", methods=["POST"])
 def send_file():
-    with open('config.json') as f:
-        config = json.load(f)
-
-    bot = telegram.Bot(token=config['telegram_bot_token'])
-    chat_id = config['telegram_chat_id']
-    file_link = config['file_url']
-
     data = request.json
-    if data.get('text') == 'Paid 💸':
-        msg = f"Thanks for the payment \nHere’s your file: {file_link}"
-        bot.send_message(chat_id=chat_id, text=msg)
-        return 'Message sent!', 200
+    print("📥 Incoming webhook:", data)
 
-    return 'Ignored', 400
+    if data and data.get("event") == "payment.captured":
+        msg = f"Thanks for the payment 😘\nHere’s your file: {FILE_URL}"
+        bot.send_message(chat_id=CHAT_ID, text=msg)
+        return "✅ File sent", 200
+    return "❌ Ignored", 400
 
-if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000)
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=5000)
