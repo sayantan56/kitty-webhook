@@ -1,0 +1,8 @@
+{
+  "telegram_bot_token": "YOUR_BOT_TOKEN",
+  "telegram_chat_id": "YOUR_CHAT_ID",
+  "razorpay_key_id": "YOUR_KEY",
+  "razorpay_key_secret": "YOUR_SECRET",
+  "razorpay_webhook_secret": "YOUR_WEBHOOK_SECRET",
+  "s3_file_url": "YOUR_FILE_URL"
+}
